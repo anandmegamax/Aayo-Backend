@@ -1,66 +1,71 @@
 import express from 'express';
-const app = express();
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import { connectDatabase } from './config/dbConnect.js';
 import errorMiddleware from './middlewares/errors.js';
-import cookieParser from 'cookie-parser';
 
-//handling uncaught exceptions
-// process.on("uncaughtException", (err) => {
-//     console.log(`Error: ${err}`);
-//     console.log("Shutting down the server due to uncaught exception");
-//     process.exit(1);
-// });
 
-process.on("unhandledRejection", (err) => {
-    console.log("Unhandled Rejection: ", err.message);
-    console.error("Full error:", err); // 👈 log full object
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err.message);
     process.exit(1);
 });
 
-dotenv.config({ path: "backend/config/config.env" });
+// Load environment variables
+dotenv.config({ path: 'backend/config/config.env' });
 
-//connecting to database
+// Connect to database
 connectDatabase();
 
-app.use(express.json({ limit: '10mb' })); //for parsing application/json
-app.use(cookieParser()); //for parsing cookies
+// Initialize app
+const app = express();
 
-//Import all routes
+// Middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(cookieParser());
+
+// Route imports
 import authRoutes from './routes/auth.js';
 import menuRoutes from './routes/menu.js';
 import permissionRoutes from './routes/permission.js';
 import roleRoutes from './routes/role.js';
-import flightRoutes from './routes/flightRoutes.js'
+import flightRoutes from './routes/flightRoutes.js';
 import flightTypeRoutes from './routes/flightTypeRoutes.js';
 import airportRoutes from './routes/airportRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
+import facilityRoutes from './routes/facilityRoutes.js';
+import flightCategoryRoutes from './routes/flightCategoryRoutes.js';
 
-app.use('/api/v1', authRoutes);
-app.use('/api/v1', menuRoutes);
-app.use('/api/v1', permissionRoutes);
-app.use('/api/v1', roleRoutes);
-app.use('/api/v1', bookingRoutes);
-app.use('/api/v1', flightRoutes);
-app.use('/api/v1', flightTypeRoutes);
-app.use('/api/v1', airportRoutes);
-app.use('/api/v1', leadRoutes);
+// Mount routes
+const routes = [
+    authRoutes,
+    menuRoutes,
+    flightCategoryRoutes,
+    permissionRoutes,
+    roleRoutes,
+    flightRoutes,
+    flightTypeRoutes,
+    airportRoutes,
+    bookingRoutes,
+    leadRoutes,
+    facilityRoutes,
+];
 
+routes.forEach((route) => app.use('/api/v1', route));
 
-//using error middleware
+// Error middleware
 app.use(errorMiddleware);
 
-const server = app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`);
-}
-);
+// Start server
+const PORT = process.env.PORT || 5000;
 
-//Handle unhandled promise rejections
-process.on("unhandledRejection", (err) => {
-    console.log(`Error: ${err}`);
-    console.log("Shutting down the server due to unhandled promise rejection");
-    server.close(() => {
-        process.exit(1);
-    });
+const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT} in ${process.env.NODE_ENV} mode`);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Rejection:', err.message);
+    server.close(() => process.exit(1));
 });

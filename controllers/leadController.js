@@ -144,3 +144,25 @@ export const convertLeadToBooking = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+// ✅ Update lead
+export const updateLead = catchAsyncErrors(async (req, res) => {
+    const { id } = req.params;
+    const { userId, fromPlace, toPlace, travelDate, travelTime } = req.body;
+
+    if (!userId || !fromPlace || !toPlace || !travelDate || !travelTime) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const lead = await Lead.findById(id);
+    if (!lead) return res.status(404).json({ message: "Lead not found" });
+
+    lead.userId = userId;
+    lead.fromPlace = fromPlace;
+    lead.toPlace = toPlace;
+    lead.travelDate = travelDate;
+    lead.travelTime = travelTime;
+
+    await lead.save();
+    res.status(200).json({ success: true, message: "Lead updated successfully", lead });
+});

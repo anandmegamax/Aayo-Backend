@@ -57,7 +57,7 @@ export const sendBookingEmailWithInvoice = async (booking, user) => {
         from: `"Bookings Team" <${process.env.SMTP_FROM_NAME}>`,
         to: user.email,
         subject: "Your Flight Booking Confirmation",
-        text: `Hello ${booking.name},\n\nYour flight booking has been confirmed. Please find the invoice attached.\n\nThanks,\nTeam`,
+        text: `Hello ${user.name},\n\nYour flight booking has been confirmed. Please find the invoice attached.\n\nThanks,\nTeam`,
         attachments: [
             {
                 filename: "invoice.pdf",

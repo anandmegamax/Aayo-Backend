@@ -235,7 +235,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 //Get All Users = ADMIN =>  /api/v1/admin/users
 export const getAllUsers = catchAsyncErrors(async (req, res, next) => {
-    const users = await User.find()
+    const users = await User.find().populate("role", "name");
 
     res.status(200).json({
         users,

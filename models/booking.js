@@ -14,8 +14,13 @@ const bookingSchema = new mongoose.Schema({
     toPlace: String,
     travelDate: String,
     travelTime: String,
-    flightType: String,
+    flightType: { type: mongoose.Schema.Types.ObjectId, ref: 'FlightType', required: true },
     remarks: String,
+    bookingType: {
+        type: String,
+        enum: ["normal", "empty_legs"],
+        default: "normal",
+    },
     status: {
         type: String,
         enum: ['pending', 'confirmed', 'cancelled'],

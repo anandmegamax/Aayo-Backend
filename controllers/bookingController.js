@@ -16,7 +16,7 @@ export const addBooking = async (req, res) => {
 
 export const getBookings = async (req, res) => {
     try {
-        const bookings = await Booking.find().populate("user");
+        const bookings = await Booking.find().populate("user").populate("flightType", "name");
 
         res.json({ bookings });
     } catch (error) {
