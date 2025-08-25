@@ -8,9 +8,9 @@ import APIFeatures from "../utils/APIFeatures.js";
 export const addBooking = async (req, res) => {
     try {
         const booking = await Booking.create(req.body);
-        res.status(201).json(booking);
+        res.status(201).json({ success: true, message: "Booking Added Successfully", booking });
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ success: false, message: err.message });
     }
 };
 

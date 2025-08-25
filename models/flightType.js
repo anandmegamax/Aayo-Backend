@@ -17,7 +17,7 @@ const flightTypeSchema = new mongoose.Schema({
     ],
     maxSpeed: { type: Number },
     baggage: { type: String, required: true },
-    baseLocation: { type: String, required: true },
+    baseLocation: { type: mongoose.Schema.Types.ObjectId, ref: "Airport", required: true },
     pilots: { type: String, required: true },
     flightAttendant: { type: Boolean, default: false },
     status: { type: Boolean, default: true },

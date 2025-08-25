@@ -37,7 +37,7 @@ export const createFlightType = catchAsyncErrors(async (req, res, next) => {
 
 
 export const getFlightTypes = async (req, res) => {
-    const flightTypes = await FlightType.find().populate("flightCategory").sort({ createdAt: -1 });
+    const flightTypes = await FlightType.find().populate("flightCategory").populate("baseLocation").sort({ createdAt: -1 });
     res.status(200).json({ success: true, flightTypes });
 };
 

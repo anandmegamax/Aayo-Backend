@@ -36,11 +36,14 @@ import bookingRoutes from './routes/bookingRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
 import facilityRoutes from './routes/facilityRoutes.js';
 import flightCategoryRoutes from './routes/flightCategoryRoutes.js';
+import pilotRoutes from './routes/pilotRoutes.js';
+import priceSettingRoutes from './routes/priceSettingRoutes.js';
 
 // Mount routes
 const routes = [
     authRoutes,
     menuRoutes,
+    pilotRoutes,
     flightCategoryRoutes,
     permissionRoutes,
     roleRoutes,
@@ -50,6 +53,7 @@ const routes = [
     bookingRoutes,
     leadRoutes,
     facilityRoutes,
+    priceSettingRoutes,
 ];
 
 routes.forEach((route) => app.use('/api/v1', route));
